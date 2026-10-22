@@ -1,0 +1,233 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: var(--bg);
+  border-bottom: 1px solid transparent;
+  transition: background-color var(--dur-base) var(--ease),
+    border-color var(--dur-base) var(--ease),
+    box-shadow var(--dur-base) var(--ease);
+}
+
+/* Khi cuộn: nền hơi mờ + viền dưới mảnh + shadow rất nhẹ */
+.navbar--scrolled {
+  background-color: rgba(255, 255, 255, 0.86);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-height: var(--nav-height);
+}
+
+.navbar__brand {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+/* --- Menu chính (desktop) --- */
+
+.navbar__nav {
+  display: none;
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.navbar__link {
+  position: relative;
+  display: inline-block;
+  padding-block: var(--space-2);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.navbar__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background-color: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.navbar__link:hover {
+  color: var(--text);
+}
+
+.navbar__link:hover::after {
+  transform: scaleX(1);
+}
+
+.navbar__link--active {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.navbar__link--active::after {
+  transform: scaleX(1);
+}
+
+/* --- Hành động bên phải (desktop) --- */
+
+.navbar__actions {
+  display: none;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* --- Lời chào khi đã đăng nhập --- */
+
+.navbar__user {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+}
+
+.navbar__user strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.navbar__mobile-user {
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-1);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+}
+
+.navbar__mobile-user strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.navbar__mobile-email {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-xsmall);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Nút hamburger (mobile / tablet nhỏ) --- */
+
+.navbar__toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.navbar__toggle:hover {
+  background-color: var(--bg-subtle);
+}
+
+/* --- Panel mobile --- */
+
+.navbar__mobile {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background-color: var(--bg);
+  box-shadow: var(--shadow-md);
+  padding-block: var(--space-4) var(--space-5);
+  max-height: calc(100dvh - var(--nav-height));
+  overflow-y: auto;
+  animation: rise var(--dur-base) var(--ease) both;
+}
+
+.navbar__mobile-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar__mobile-link {
+  display: block;
+  padding-block: var(--space-3);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.navbar__mobile-link:hover {
+  color: var(--accent);
+}
+
+.navbar__mobile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+/* --- Tablet: thu gọn khoảng cách --- */
+
+@media (min-width: 900px) {
+  /* Logo trái — menu chính giữa — hành động phải */
+  .navbar__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .navbar__nav,
+  .navbar__actions {
+    display: flex;
+  }
+
+  .navbar__nav {
+    justify-content: center;
+  }
+
+  .navbar__actions {
+    justify-content: flex-end;
+  }
+
+  .navbar__toggle,
+  .navbar__mobile {
+    display: none;
+  }
+
+  .navbar__links {
+    gap: var(--space-5);
+  }
+}
+
+/* --- Desktop rộng: khoảng cách thoáng --- */
+
+@media (min-width: 1140px) {
+  .navbar__inner {
+    min-height: 80px;
+    gap: var(--space-7);
+  }
+
+  .navbar__links {
+    gap: var(--space-7);
+  }
+}

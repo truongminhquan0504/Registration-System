@@ -1,0 +1,65 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text);
+}
+
+.logo__mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  background-color: var(--bg-dark);
+  color: #b40b0b;
+  border-radius: var(--radius-sm);
+}
+
+.logo__wordmark {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.logo__wordmark strong {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* --- Cỡ md: dùng trong navbar --- */
+
+.logo--md .logo__mark {
+  width: 34px;
+  height: 34px;
+}
+
+.logo--md .logo__mark svg {
+  width: 22px;
+  height: 22px;
+}
+
+.logo--md .logo__wordmark {
+  font-size: 0.9375rem;
+}
+
+/* --- Cỡ sm: dùng trong mockup --- */
+
+.logo--sm {
+  gap: var(--space-2);
+}
+
+.logo--sm .logo__mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+}
+
+.logo--sm .logo__mark svg {
+  width: 15px;
+  height: 15px;
+}
+
+.logo--sm .logo__wordmark {
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}

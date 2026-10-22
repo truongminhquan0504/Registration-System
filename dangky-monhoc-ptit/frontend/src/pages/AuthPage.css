@@ -1,0 +1,182 @@
+/* Giao diện dùng chung cho trang Đăng nhập và Đăng ký */
+
+.auth {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: calc(100dvh - var(--nav-height));
+  padding-block: var(--space-8) var(--space-9);
+  background-color: var(--bg-subtle);
+}
+
+.auth__inner {
+  width: 100%;
+  max-width: 440px;
+  padding-inline: var(--gutter);
+}
+
+/* ---------- Phần mở đầu ---------- */
+
+.auth__head {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.auth__title {
+  margin-top: var(--space-3);
+  font-size: clamp(1.625rem, 1.35rem + 1.2vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+.auth__subtitle {
+  margin-top: var(--space-3);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* ---------- Thẻ chứa form ---------- */
+
+.auth__card {
+  padding: var(--space-6) var(--space-5);
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ---------- Trường nhập ---------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field__label {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.field__input {
+  width: 100%;
+  height: 48px;
+  padding-inline: var(--space-4);
+  background-color: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: var(--fs-body);
+  color: var(--text);
+  transition: border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+
+.field__input::placeholder {
+  color: var(--text-muted);
+}
+
+.field__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.field__input:disabled {
+  background-color: var(--bg-subtle);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* Trường có lỗi: đổi màu viền VÀ có chữ mô tả bên dưới,
+   không chỉ dựa vào màu sắc (CLAUDE.md mục 9). */
+.field__input--error {
+  border-color: #b42318;
+}
+
+.field__input--error:focus {
+  border-color: #b42318;
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.12);
+}
+
+.field__error {
+  font-size: var(--fs-xsmall);
+  line-height: 1.5;
+  color: #b42318;
+}
+
+/* ---------- Thông báo chung ---------- */
+
+.auth__alert {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-small);
+  line-height: 1.55;
+}
+
+.auth__alert--error {
+  background-color: #fef3f2;
+  border-color: #fda29b;
+  color: #912018;
+}
+
+.auth__alert--success {
+  background-color: #ecfdf3;
+  border-color: #a6f4c5;
+  color: #05603a;
+}
+
+/* ---------- Chân form ---------- */
+
+.auth__footer {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+}
+
+.auth__link {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.auth__link:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.auth__note {
+  margin-top: var(--space-5);
+  text-align: center;
+  font-size: var(--fs-xsmall);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (min-width: 640px) {
+  .auth__card {
+    padding: var(--space-7) var(--space-6);
+  }
+}
+
+/* Màn hình rất hẹp: giảm padding để form không bị chật */
+@media (max-width: 400px) {
+  .auth__card {
+    padding: var(--space-5) var(--space-4);
+  }
+}
