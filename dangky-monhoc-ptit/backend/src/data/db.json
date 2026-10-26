@@ -4,55 +4,55 @@
       "id": 1,
       "name": "Quản trị hệ thống",
       "email": "admin@ptit.edu.vn",
-      "password": "$2a$10$CmV6DvvticPnFFFX.aeniuPTbwVKCKHygXUqe8hHCySisPmDuwrz6",
+      "password": "$2a$10$pMp/XKZlg2a97.cZ5jmoYOjUs9lJrfoHxq4BKYxpWFh1qGuaOHE46",
       "role": "ADMIN",
       "student_code": null,
-      "created_at": "2026-10-03T09:29:00.882Z"
+      "created_at": "2026-10-26T03:29:17.577Z"
     },
     {
       "id": 2,
       "name": "GV. Nguyễn Văn An",
       "email": "teacher1@ptit.edu.vn",
-      "password": "$2a$10$CmV6DvvticPnFFFX.aeniuPTbwVKCKHygXUqe8hHCySisPmDuwrz6",
+      "password": "$2a$10$pMp/XKZlg2a97.cZ5jmoYOjUs9lJrfoHxq4BKYxpWFh1qGuaOHE46",
       "role": "TEACHER",
       "student_code": null,
-      "created_at": "2026-10-03T09:29:00.883Z"
+      "created_at": "2026-10-26T03:29:17.578Z"
     },
     {
       "id": 3,
       "name": "GV. Trần Thị Bình",
       "email": "teacher2@ptit.edu.vn",
-      "password": "$2a$10$CmV6DvvticPnFFFX.aeniuPTbwVKCKHygXUqe8hHCySisPmDuwrz6",
+      "password": "$2a$10$pMp/XKZlg2a97.cZ5jmoYOjUs9lJrfoHxq4BKYxpWFh1qGuaOHE46",
       "role": "TEACHER",
       "student_code": null,
-      "created_at": "2026-10-03T09:29:00.883Z"
+      "created_at": "2026-10-26T03:29:17.578Z"
     },
     {
       "id": 4,
       "name": "GV. Lê Văn Cường",
       "email": "teacher3@ptit.edu.vn",
-      "password": "$2a$10$CmV6DvvticPnFFFX.aeniuPTbwVKCKHygXUqe8hHCySisPmDuwrz6",
+      "password": "$2a$10$pMp/XKZlg2a97.cZ5jmoYOjUs9lJrfoHxq4BKYxpWFh1qGuaOHE46",
       "role": "TEACHER",
       "student_code": null,
-      "created_at": "2026-10-03T09:29:00.883Z"
+      "created_at": "2026-10-26T03:29:17.578Z"
     },
     {
       "id": 5,
       "name": "Phạm Văn Đức",
       "email": "sv1@ptit.edu.vn",
-      "password": "$2a$10$CmV6DvvticPnFFFX.aeniuPTbwVKCKHygXUqe8hHCySisPmDuwrz6",
+      "password": "$2a$10$pMp/XKZlg2a97.cZ5jmoYOjUs9lJrfoHxq4BKYxpWFh1qGuaOHE46",
       "role": "STUDENT",
       "student_code": "B21DCCN001",
-      "created_at": "2026-10-03T09:29:00.883Z"
+      "created_at": "2026-10-26T03:29:17.578Z"
     },
     {
       "id": 6,
       "name": "Hoàng Thị Em",
       "email": "sv2@ptit.edu.vn",
-      "password": "$2a$10$CmV6DvvticPnFFFX.aeniuPTbwVKCKHygXUqe8hHCySisPmDuwrz6",
+      "password": "$2a$10$pMp/XKZlg2a97.cZ5jmoYOjUs9lJrfoHxq4BKYxpWFh1qGuaOHE46",
       "role": "STUDENT",
       "student_code": "B21DCCN002",
-      "created_at": "2026-10-03T09:29:00.883Z"
+      "created_at": "2026-10-26T03:29:17.578Z"
     }
   ],
   "subjects": [
@@ -104,13 +104,6 @@
       "name": "Hệ điều hành",
       "credits": 3,
       "description": "Tiến trình, bộ nhớ, hệ thống tệp, đồng bộ hóa."
-    },
-    {
-      "id": 8,
-      "code": "INT13162",
-      "name": "LẬP TRÌNH PYTHON",
-      "credits": 4,
-      "description": "LẬP TRÌNH PYTHON"
     }
   ],
   "classes": [
@@ -240,15 +233,15 @@
       "id": 1,
       "student_id": 5,
       "class_id": 3,
-      "status": "REGISTERED",
-      "registered_at": "2026-10-03T09:29:00.883Z"
+      "status": "CANCELLED",
+      "registered_at": "2026-10-26T03:29:17.578Z"
     },
     {
       "id": 2,
       "student_id": 6,
       "class_id": 1,
       "status": "REGISTERED",
-      "registered_at": "2026-10-03T09:29:00.883Z"
+      "registered_at": "2026-10-26T03:29:17.578Z"
     }
   ]
 }
