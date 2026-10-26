@@ -1,7 +1,19 @@
 import { db } from "../data/store.js";
 
 export function list(req, res) {
-  const subjects = db.subjects.all().sort((a, b) => a.code.localeCompare(b.code));
+  const { q } = req.query;
+  let subjects = db.subjects.all();
+
+  if (q?.trim()) {
+    const keyword = q.trim().toLowerCase();
+    subjects = subjects.filter(
+      (s) =>
+        s.code.toLowerCase().includes(keyword) ||
+        s.name.toLowerCase().includes(keyword)
+    );
+  }
+
+  subjects.sort((a, b) => a.code.localeCompare(b.code));
   return res.json({ data: subjects });
 }
 
@@ -16,6 +28,9 @@ export function create(req, res) {
 
   if (!code?.trim() || !name?.trim() || !credits) {
     return res.status(400).json({ message: "Vui lòng nhập đủ mã môn, tên môn và số tín chỉ." });
+  }
+  if (Number(credits) < 1) {
+    return res.status(400).json({ message: "Số tín chỉ phải lớn hơn 0." });
   }
   if (db.subjects.find((s) => s.code.toLowerCase() === code.trim().toLowerCase())) {
     return res.status(409).json({ message: "Mã môn học đã tồn tại." });
@@ -36,8 +51,21 @@ export function update(req, res) {
   if (!existing) return res.status(404).json({ message: "Không tìm thấy môn học." });
 
   const { code, name, credits, description } = req.body ?? {};
+  const nextCode = code?.trim() ? code.trim().toUpperCase() : existing.code;
+
+  if (
+    db.subjects.find(
+      (s) => s.id !== id && s.code.toLowerCase() === nextCode.toLowerCase()
+    )
+  ) {
+    return res.status(409).json({ message: "Mã môn học đã tồn tại." });
+  }
+  if (credits !== undefined && Number(credits) < 1) {
+    return res.status(400).json({ message: "Số tín chỉ phải lớn hơn 0." });
+  }
+
   const updated = db.subjects.update(id, {
-    code: code?.trim() ? code.trim().toUpperCase() : existing.code,
+    code: nextCode,
     name: name?.trim() ? name.trim() : existing.name,
     credits: credits ? Number(credits) : existing.credits,
     description: description !== undefined ? description.trim() : existing.description,

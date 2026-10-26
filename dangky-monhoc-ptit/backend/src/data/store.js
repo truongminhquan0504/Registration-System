@@ -15,6 +15,9 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_FILE = path.join(__dirname, "db.json");
 
+let cache = null;
+let lastMtimeMs = 0;
+
 function emptyDb() {
   return {
     users: [],
@@ -27,28 +30,44 @@ function emptyDb() {
 function readDb() {
   if (!fs.existsSync(DB_FILE)) {
     writeDb(emptyDb());
+    return cache;
   }
+
+  const stat = fs.statSync(DB_FILE);
+  if (cache && stat.mtimeMs === lastMtimeMs) {
+    return cache;
+  }
+
   const raw = fs.readFileSync(DB_FILE, "utf-8");
   try {
-    return JSON.parse(raw);
+    cache = JSON.parse(raw);
+    lastMtimeMs = stat.mtimeMs;
+    return cache;
   } catch {
-    return emptyDb();
+    cache = emptyDb();
+    return cache;
   }
 }
 
 function writeDb(db) {
+  cache = db;
   fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), "utf-8");
+  try {
+    lastMtimeMs = fs.statSync(DB_FILE).mtimeMs;
+  } catch {
+    lastMtimeMs = Date.now();
+  }
 }
 
 function nextId(rows) {
   return rows.reduce((max, row) => Math.max(max, row.id), 0) + 1;
 }
 
-/** Truy cập một bảng (collection) trong file JSON, luôn đọc/ghi trực tiếp xuống đĩa. */
+/** Truy cập một bảng (collection) trong file JSON, kết hợp bộ nhớ đệm (in-memory cache) để tối ưu tốc độ đọc. */
 function table(name) {
   return {
     all() {
-      return readDb()[name];
+      return [...readDb()[name]];
     },
     find(predicate) {
       return readDb()[name].find(predicate);

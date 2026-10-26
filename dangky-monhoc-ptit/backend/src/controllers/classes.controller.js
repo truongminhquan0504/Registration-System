@@ -20,6 +20,27 @@ function enrich(classItem) {
   };
 }
 
+/** Kiểm tra xung đột lịch giảng dạy của giảng viên hoặc xung đột phòng học trong cùng học kỳ. */
+function findClassConflict(candidate, ignoreId = null) {
+  const sameSemesterClasses = db.classes.filter(
+    (c) => c.semester === candidate.semester && c.id !== ignoreId
+  );
+
+  for (const other of sameSemesterClasses) {
+    if (!isScheduleOverlap(candidate, other)) continue;
+
+    if (candidate.teacher_id && other.teacher_id === candidate.teacher_id) {
+      return `Giảng viên đã có lịch dạy lớp ${other.class_code} (${formatSchedule(other)}).`;
+    }
+
+    if (other.room.toLowerCase() === candidate.room.toLowerCase()) {
+      return `Phòng ${candidate.room} đã được xếp cho lớp ${other.class_code} (${formatSchedule(other)}).`;
+    }
+  }
+
+  return null;
+}
+
 export function list(req, res) {
   const { subject_id, semester, teacher_id, q } = req.query;
   let classes = db.classes.all();
@@ -66,11 +87,14 @@ export function create(req, res) {
   if (db.classes.find((c) => c.class_code.toLowerCase() === class_code.trim().toLowerCase())) {
     return res.status(409).json({ message: "Mã lớp học phần đã tồn tại." });
   }
+  if (Number(max_students) < 1) {
+    return res.status(400).json({ message: "Sĩ số tối đa phải lớn hơn 0." });
+  }
   if (Number(start_period) > Number(end_period)) {
     return res.status(400).json({ message: "Tiết bắt đầu phải nhỏ hơn hoặc bằng tiết kết thúc." });
   }
 
-  const classItem = db.classes.insert({
+  const payload = {
     subject_id: Number(subject_id),
     class_code: class_code.trim(),
     teacher_id: teacher_id ? Number(teacher_id) : null,
@@ -80,7 +104,14 @@ export function create(req, res) {
     day_of_week: Number(day_of_week),
     start_period: Number(start_period),
     end_period: Number(end_period),
-  });
+  };
+
+  const conflictMsg = findClassConflict(payload);
+  if (conflictMsg) {
+    return res.status(409).json({ message: conflictMsg });
+  }
+
+  const classItem = db.classes.insert(payload);
   return res.status(201).json({ data: enrich(classItem) });
 }
 
@@ -91,11 +122,42 @@ export function update(req, res) {
 
   const body = req.body ?? {};
   const patch = {};
-  for (const key of ["subject_id", "teacher_id", "max_students", "day_of_week", "start_period", "end_period"]) {
-    if (body[key] !== undefined) patch[key] = Number(body[key]);
+
+  for (const key of ["subject_id", "max_students", "day_of_week", "start_period", "end_period"]) {
+    if (body[key] !== undefined && body[key] !== "") patch[key] = Number(body[key]);
+  }
+  if (body.teacher_id !== undefined) {
+    patch.teacher_id = body.teacher_id ? Number(body.teacher_id) : null;
   }
   for (const key of ["class_code", "semester", "room"]) {
     if (body[key] !== undefined) patch[key] = String(body[key]).trim();
+  }
+
+  const merged = { ...existing, ...patch };
+
+  if (!db.subjects.find((s) => s.id === merged.subject_id)) {
+    return res.status(400).json({ message: "Môn học không tồn tại." });
+  }
+  if (merged.teacher_id && !db.users.find((u) => u.id === merged.teacher_id && u.role === "TEACHER")) {
+    return res.status(400).json({ message: "Giảng viên không hợp lệ." });
+  }
+  if (
+    db.classes.find(
+      (c) => c.id !== id && c.class_code.toLowerCase() === merged.class_code.toLowerCase()
+    )
+  ) {
+    return res.status(409).json({ message: "Mã lớp học phần đã tồn tại." });
+  }
+  if (merged.max_students < 1) {
+    return res.status(400).json({ message: "Sĩ số tối đa phải lớn hơn 0." });
+  }
+  if (merged.start_period > merged.end_period) {
+    return res.status(400).json({ message: "Tiết bắt đầu phải nhỏ hơn hoặc bằng tiết kết thúc." });
+  }
+
+  const conflictMsg = findClassConflict(merged, id);
+  if (conflictMsg) {
+    return res.status(409).json({ message: conflictMsg });
   }
 
   const updated = db.classes.update(id, patch);

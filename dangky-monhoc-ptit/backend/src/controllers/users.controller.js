@@ -21,6 +21,9 @@ export function updateRole(req, res) {
   if (!["STUDENT", "TEACHER", "ADMIN"].includes(role)) {
     return res.status(400).json({ message: "Vai trò không hợp lệ." });
   }
+  if (req.user?.id === id && role !== "ADMIN") {
+    return res.status(400).json({ message: "Bạn không thể tự hạ quyền Quản trị viên của chính mình." });
+  }
   const existing = db.users.find((u) => u.id === id);
   if (!existing) return res.status(404).json({ message: "Không tìm thấy tài khoản." });
 
